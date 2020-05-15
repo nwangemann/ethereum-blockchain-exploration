@@ -66,7 +66,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
             let oldSellerBalance
             oldSellerBalance = await web3.eth.getBalance(seller)
             oldSellerBalance = new web3.utils.BN(oldSellerBalance)
-            //success: buyer makes purchase
+            //success: buyer makes purchase 
             result = await marketplace.purchaseProduct(productCount, {from: buyer, value:  web3.utils.toWei('1', 'Ether')})
 
             const event = result.logs[0].args
