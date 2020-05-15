@@ -3,6 +3,7 @@ import logo from '../logo.png';
 import './App.css';
 import Web3 from 'web3';
 import Marketplace from '../abis/Marketplace.json'
+import NavBar from '../components/NavBar'
 
 class App extends Component {
   constructor(props){
@@ -39,11 +40,22 @@ class App extends Component {
     this.setState({
       account: accounts[0]
     })
+    const networkId = await web3.eth.net.getId()
+    const networkData = Marketplace.networks[networkId]
+    if(networkData){
+      const marketplace = web3.eth.Contract(Marketplace.abi, networkData.address)
+      this.setState({ marketplace: marketplace })
+      this.setState({ loading: false })
+    } else {
+      window.alert('Marketplace not deployed to detected network')
+    }
+  
   }
   
   render() {
     return (
       <div>
+        <NavBar account={this.state.account} />
         <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
           <h1 className="navbar-brand col-sm-3 col-md-2 mr-0">
             Blockchain Exploration Marketplace
