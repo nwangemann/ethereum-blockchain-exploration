@@ -44,7 +44,7 @@ contract Marketplace {
     function purchaseProduct(uint _id) public payable {
         Product memory _product = products[_id];
         address payable _seller = _product.owner;
-        require(_product.id > 0 && _product.id < productCount);
+        require(_product.id > 0 && _product.id <= productCount);
         require(msg.value >= _product.price);
         require(!_product.purchased);
         require(_seller != msg.sender);

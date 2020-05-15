@@ -86,6 +86,15 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
             
             const expectedBalance = oldSellerBalance.add(price)
             assert.equal(newSellerBalance.toString(), expectedBalance.toString())
+
+            //failure: tries to buy a product that does not exist
+            await marketplace.purchaseProduct(99, {from: buyer, value:  web3.utils.toWei('1', 'Ether')}).should.be.rejected;
+            //failure: buyer tries to buy without sufficient ether
+            await marketplace.purchaseProduct(productCount, {from: buyer, value:  web3.utils.toWei('0.5', 'Ether')}).should.be.rejected;
+            //failure: deployer attempts to purchase product
+            await marketplace.purchaseProduct(productCount, {from: deployer, value:  web3.utils.toWei('1', 'Ether')}).should.be.rejected;
+            //failure: buyer cannot buy the product twice
+            await marketplace.purchaseProduct(productCount, {from: buyer, value:  web3.utils.toWei('1', 'Ether')}).should.be.rejected;
         })
     })
 })
