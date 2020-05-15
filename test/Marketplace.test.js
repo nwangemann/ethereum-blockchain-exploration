@@ -76,7 +76,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
             assert.equal(event.owner, buyer, 'owner is correct')
             assert.equal(event.purchased, true, 'purchased is correct')
 
-            //check that the seller received the funds
+            //check that the seller received the funds 
             let newSellerBalance
             newSellerBalance = await web3.eth.getBalance(seller)
             newSellerBalance = new web3.utils.BN(newSellerBalance)
