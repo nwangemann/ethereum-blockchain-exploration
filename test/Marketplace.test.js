@@ -62,7 +62,7 @@ contract('Marketplace', ([deployer, seller, buyer]) => {
         })
 
         it('sells products', async () => {
-            //track seller balance before purchase 
+            //track seller balance before purchase
             let oldSellerBalance
             oldSellerBalance = await web3.eth.getBalance(seller)
             oldSellerBalance = new web3.utils.BN(oldSellerBalance)
