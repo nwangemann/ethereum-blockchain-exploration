@@ -1,1 +1,6 @@
-/* Styles go here */
+
+.d-flex{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
