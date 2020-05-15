@@ -16,19 +16,12 @@ class App extends Component {
     };
   }
 
-  createProduct = (name, price) => {
-    this.setState({ loading: true })
-    this.state.marketplace.methods.createProduct(name, price).send({from:this.state.account})
-    .once('receipt', (receipt) => {
-      this.setState({ loading: false })
-    })
-  }
-
+  
   async componentWillMount() {
     await this.loadWeb3();
     await this.loadBlockchainData();
   }
-
+  
   async loadWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
@@ -38,6 +31,21 @@ class App extends Component {
     } else {
       window.alert("Non-Ethereum browser detected. Try again buckaroo");
     }
+  }
+  
+  createProduct = (name, price) => {
+    this.setState({ loading: true })
+    this.state.marketplace.methods.createProduct(name, price).send({from:this.state.account})
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
+  }
+  purchaseProduct = (id, price) => {
+    this.setState({ loading: true })
+    this.state.marketplace.methods.purchaseProduct(id).send({from:this.state.account, value: price})
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false })
+    })
   }
 
   async loadBlockchainData() {
@@ -57,7 +65,13 @@ class App extends Component {
       );
       this.setState({ marketplace: marketplace });
       const productCount = await marketplace.methods.productCount().call()
-      console.log(productCount)
+      this.setState({ productCount })
+      for (let i = 1; i <= productCount; i++){
+        const product = await marketplace.methods.products(i).call()
+        this.setState({
+          products: [...this.state.products, product]
+        })
+      }
       this.setState({ loading: false });
     } else {
       window.alert("Marketplace not deployed to detected network");
@@ -71,7 +85,7 @@ class App extends Component {
         <div className="container-fluid mt-5">
           <div className="row">
             <main role="main" className="col-lg-12 d-flex">
-              { this.state.loading ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>: <Main createProduct={this.createProduct} />}
+              { this.state.loading ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>: <Main createProduct={this.createProduct} purchaseProduct={this.purchaseProduct} products={this.state.products} />}
             </main>
           </div>
         </div>
