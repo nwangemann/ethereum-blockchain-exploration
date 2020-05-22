@@ -15,7 +15,6 @@ class App extends Component {
       loading: true,
     };
   }
-
   
   async componentWillMount() {
     await this.loadWeb3();
